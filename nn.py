@@ -46,7 +46,7 @@ class Classifier (nn.Module):
     
 
 
-def train_classifier (device, network, trainset, batch_size=100, epochs=50, accuracy_target=0.9, step_scheduler=3, verbose=True):
+def train_classifier (device, network, trainset, batch_size=100, epochs=40, accuracy_target=0.9, step_scheduler=3, verbose=False):
 
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True )
     
@@ -88,17 +88,18 @@ def train_classifier (device, network, trainset, batch_size=100, epochs=50, accu
                 trainloader = torch.utils.data.DataLoader(trainset, batch_size=512, shuffle=True )
 
             if (accuracy_train>accuracy_target):
-
-                print("End of training at epoch: ", epoch)
-                print(f"\t loss: {loss_train:>4f}")
-                print(f"\t accuracy: {accuracy_train:>4f}")
+                
+                if verbose:
+                    print("End of training at epoch: ", epoch)
+                    print(f"\t loss: {loss_train:>4f}")
+                    print(f"\t accuracy: {accuracy_train:>4f}")
                 return True
             if (accuracy_train<0.85):
                 break
             if (epoch%5==0 and verbose):
-                    print("Epoch: ", epoch)
-                    print(f"\t loss: {loss_train:>4f}")
-                    print(f"\t accuracy: {accuracy_train:>4f}")
-    
-    print('Training not converged.')
+                print("Epoch: ", epoch)
+                print(f"\t loss: {loss_train:>4f}")
+                print(f"\t accuracy: {accuracy_train:>4f}")
+    if verbose:
+        print('Training not converged.')
     return False
